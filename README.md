@@ -5,6 +5,6 @@ Hi! I made this web version of jankenpon just to learn more about React Context,
 # Install & Run :suspect:
 
 You will nedd yarn or npm.
-1 - yarn OR npm install.
-2 - yarn start OR npx run start.
-3 - play :feelsgood:
+1. yarn OR npm install.
+2. yarn start OR npx run start.
+3. play :feelsgood:
