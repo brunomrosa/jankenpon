@@ -8,3 +8,7 @@ You will nedd yarn or npm.
 1. yarn OR npm install.
 2. yarn start OR npx run start.
 3. play :feelsgood:
+
+# Play Online
+
+You can play it on the following link: https://brunomrosa.github.io/jankenpon/
