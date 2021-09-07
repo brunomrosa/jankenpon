@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Main from './Main'
 import GlobalStyle from './styles/global'
 import {ToastContainer} from 'react-toastify'
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <Main />

@@ -1,15 +1,15 @@
 import React, {useState} from 'react'
-import {useGameState} from '../../context/game/context'
+import {useGameContext} from '../../context/GameContext'
 
-export default function GameDisplay() {
+const GameDisplay: React.FC = () => {
   const [reveal, setReveal] = useState(false)
-  const {wins, losses, cpu} = useGameState()
+  const {wins, losses, cpuSelected} = useGameContext()
 
   return (
     <div>
       <div>
         {reveal
-          ? `The CPU has chosen ${cpu}`
+          ? `The CPU has chosen ${cpuSelected}`
           : 'Do you wanna see the cpu hand?'}
 
         {reveal ? (
@@ -34,3 +34,5 @@ export default function GameDisplay() {
     </div>
   )
 }
+
+export default GameDisplay;

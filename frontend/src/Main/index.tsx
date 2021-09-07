@@ -2,8 +2,8 @@ import Game from './Game'
 import GameDisplay from './GameDisplay'
 import React from 'react'
 import {Container} from './styled'
-import {GameProvider} from '../context/game/provider'
-function main() {
+import {GameProvider} from '../context/GameContext'
+const Main: React.FC = () => {
   return (
     <GameProvider>
       <Container>
@@ -16,4 +16,4 @@ function main() {
   )
 }
 
-export default main
+export default Main
