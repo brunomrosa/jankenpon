@@ -1,19 +1,16 @@
-import Game from './Game'
-import GameDisplay from './GameDisplay'
-import React from 'react'
-import {Container} from './styled'
-import {GameProvider} from '../context/GameContext'
-const Main: React.FC = () => {
-  return (
-    <GameProvider>
-      <Container>
-        <h1>
-          <GameDisplay />
-          <Game />
-        </h1>
-      </Container>
-    </GameProvider>
-  )
-}
+import React from 'react';
+import Game from '../Components/Game';
 
-export default Main
+import { Container } from './styles';
+
+import { GameProvider } from '../Context/GameContext';
+
+const Main: React.FC = () => (
+  <GameProvider>
+    <Container>
+      <Game />
+    </Container>
+  </GameProvider>
+);
+
+export default Main;

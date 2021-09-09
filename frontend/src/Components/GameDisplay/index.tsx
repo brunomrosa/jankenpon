@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useGameContext} from '../../context/GameContext'
+import {useGameContext} from '../../Context/GameContext'
 
 const GameDisplay: React.FC = () => {
   const [reveal, setReveal] = useState(false)
@@ -35,4 +35,4 @@ const GameDisplay: React.FC = () => {
   )
 }
 
-export default GameDisplay;
+export default GameDisplay
