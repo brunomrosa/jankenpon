@@ -1,5 +1,7 @@
-import {createGlobalStyle} from 'styled-components'
-import 'react-toastify/dist/ReactToastify.css'
+import { createGlobalStyle } from 'styled-components';
+import { darken } from 'polished';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
   
@@ -8,7 +10,11 @@ export default createGlobalStyle`
     background: rgb(165,1,1);
     background: linear-gradient(90deg, rgba(165,1,1,1) 0%, rgba(193,4,4,1) 8%, rgba(116,1,1,1) 81%);
   }
-
+  #root {
+    min-height: 100vh;
+    min-width: 100vw;
+  }
+  
   h1,h2,div {
     font-family: 'Roboto', sans-serif;
   }
@@ -35,13 +41,37 @@ export default createGlobalStyle`
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+
+    width: 150px;
+    height: 50px;
   }
 
   input {
     margin: 0px 10px;
-    border: none;
+    border: 0.5px solid #AE0C0C;
     border-radius: 5px;
-    width: 100px;
-    height: 20px;
+    width: 120px;
+    height: 30px;
+    background-color: #c4320d;
+    color: #fff;
+
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #fff;
+      opacity: 0.7; /* Firefox */
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: red;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      color: red;
+    }
+    :focus {
+      outline: none;
+     border: 0.5px solid ${darken(0.2, '#AE0C0C')};
+     
+    }
   }
-`
+  
+`;

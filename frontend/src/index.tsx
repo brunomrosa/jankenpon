@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ToastContainer } from 'react-toastify';
-import Main from './Main';
-import GlobalStyle from './styles/Global';
+import App from './App';
 
-const App: React.FC = () => (
-  <>
-    <Main />
-    <GlobalStyle />
-    <ToastContainer />
-  </>
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root'),
 );
-
-ReactDOM.render(<App />, document.getElementById('root'));

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useGameContext } from '../../Context/GameContext';
-import GameDisplay from '../GameDisplay';
+import GameDisplay from '../../Components/GameDisplay';
 import { Container, ButtonContainer } from './styles';
 
 const Singleplayer: React.FC = () => {

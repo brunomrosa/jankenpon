@@ -29,6 +29,7 @@
         "import/no-unresolved": "warn",
         "import/extensions": "off",
         "no-unused-vars": "warn",
+        "linebreak-style": 0,
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx", "ts"] }]
     }
 }
