@@ -1,5 +1,9 @@
 const users = [];
 
+export const getAllUsers = () => {
+  return users;
+};
+
 export const addUser = (id, username, room) => {
   const existingUser = users.find(
     (user) =>
@@ -10,6 +14,9 @@ export const addUser = (id, username, room) => {
     return { error: "Username has already been taken" };
   if (!username && !room) return { error: "Username and room are required" };
   if (!username) return { error: "Username is required" };
+  if (!!!username) {
+    error: "Username is required";
+  }
   if (!room) return { error: "Room is required" };
 
   const user = { id, username, room };
@@ -23,14 +30,26 @@ export const getUser = (id) => {
   return user;
 };
 
-export const deleteUser = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) return users.splice(index, 1)[0];
+export const deleteUser = async (id) => {
+  const index = users.findIndex((user) => user.id == id);
+  let user = await getUser(id);
+  if (user) {
+    await users.splice(index, 1)[0];
+    if (index !== -1) return user;
+  }
 };
 
 export const getUsers = (room) => {
   const retorno = users.filter((user) => user?.room === room);
   return retorno;
+};
+
+export const getOponent = (username, room) => {
+  const findOponent = users.filter(
+    (user) => user?.username !== username && user?.room === room
+  );
+
+  return findOponent;
 };
 
 export const GetUserByRoom = (username, room) => {
@@ -41,15 +60,20 @@ export const GetUserByRoom = (username, room) => {
   return findUser;
 };
 
-export const selectOption = ({ username, room, option }) => {
+export const selectOption = async ({ username, room, option }) => {
   const findUser = GetUserByRoom(username, room);
+
   if (findUser && !findUser.option) {
     const index = users.findIndex(
       (user) => user.username === username && user.room === room
     );
 
-    const saveSelection = { username, room, option };
-    if (index !== -1) return users.splice(index, 1, saveSelection);
+    const user = users[index];
+
+    const saveSelection = { id: user?.id, username, room, option };
+    await users.splice(index, 1, saveSelection);
+
+    if (index !== -1) return users[index];
   }
 
   return findUser;

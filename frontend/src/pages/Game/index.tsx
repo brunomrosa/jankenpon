@@ -12,6 +12,7 @@ const Game: React.FC = () => {
 
   return (
     <Container>
+
       <GameModeSelect />
       {gameMode === 'singleplayer' ? <Singleplayer /> : <Login />}
     </Container>
