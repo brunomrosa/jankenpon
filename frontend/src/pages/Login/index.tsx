@@ -9,14 +9,15 @@ const Multiplayer: React.FC = () => {
   const [username, setUsername] = useState('');
   const [gameroom, setGameroom] = useState('');
   const { push } = useHistory();
-  const { socket, setPlayername } = useSocketContext();
+  const { socket, updatePlayer, player } = useSocketContext();
 
   function handleClick() {
     socket.emit('login', { username, gameroom }, (callback: any) => {
       if (callback?.error) {
         return toast.error(callback?.error);
       }
-      setPlayername(username);
+
+      updatePlayer(callback);
       push(`/multiplayer?room=${callback?.room}`);
       return toast.success(`Welcome to ${gameroom}`);
     });

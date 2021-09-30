@@ -19,7 +19,7 @@ export const addUser = (id, username, room) => {
   }
   if (!room) return { error: "Room is required" };
 
-  const user = { id, username, room };
+  const user = { id, username, room, score: 0 };
   users.push(user);
 
   return { user };
@@ -49,7 +49,13 @@ export const getOponent = (username, room) => {
     (user) => user?.username !== username && user?.room === room
   );
 
-  return findOponent;
+  return findOponent[0];
+};
+
+export const getUsersInRoom = (room) => {
+  const findUsers = users.filter((user) => user?.room === room);
+
+  return findUsers;
 };
 
 export const GetUserByRoom = (username, room) => {

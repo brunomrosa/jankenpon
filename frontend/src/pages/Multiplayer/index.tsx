@@ -25,7 +25,7 @@ interface Oponent {
 
 const Multiplayer: React.FC = () => {
   const {
-    socket, playerName, oponent, setOponent,
+    socket, player, oponent, setOponent, updatePlayer,
   } = useSocketContext();
 
   const [count, setCount] = useState(0);
@@ -33,54 +33,23 @@ const Multiplayer: React.FC = () => {
   const params = new URL(window.location.toString()).searchParams;
   const room = params.get('room');
 
-  const startGame = () => {
-    socket.emit('roomInfo', playerName, room, (response: Oponent[] | any) => {
-      if (response?.error) {
-        console.log('err: ');
-        console.log(response?.error);
-      }
-      if (response.length !== 0 && !response?.error) {
-        toast.info('Here comes a new challenger');
-        setOponent(response[0]);
-        return false;
-      }
-      if (!oponent?.username) { setTimeout(() => startGame(), 3000); }
-    });
-  };
-
-  const verifyIfOponentHasChosen = async () => {
-    await socket.emit('verifyIfOponentHasChosen', { username: playerName, room }, (callback: any) => {
-      if (callback.option) {
-        return setOponent(callback);
-      }
-    });
-  };
-
   const handleClick = (option: string) => {
     socket.emit('selectOption', {
-      username: playerName, room, option,
+      username: player.username, room, option,
     }, (callback: any) => {
-      /*  console.log(callback); */
+      updatePlayer(callback);
     });
 
     setPlayerOption(true);
-    verifyIfOponentHasChosen();
   };
 
   useEffect(() => {
-    let verify: any;
-    if (!oponent?.option) {
-      verify = setTimeout(() => verifyIfOponentHasChosen(), 1000);
-    }
-    return clearTimeout(verify);
-  }, []);
+    /* console.log(player);
+    console.log(player.username); */
 
-  useEffect(() => {
-    console.log(oponent);
-    if (!oponent?.username) {
-      startGame();
-    }
-  }, [oponent]);
+  }, [player]);
+
+  socket.on('playerJoined', () => { /* console.log('player: ', player) */ console.log('rodou playerJoined'); });
 
   return (
     <Container>
@@ -98,9 +67,9 @@ const Multiplayer: React.FC = () => {
       </ButtonContainer>
 
       <h1>
-        {playerName}
+        {player?.username}
       </h1>
-      {!playerOption && <Loader />}
+      {!player?.option && <Loader />}
     </Container>
   );
 };

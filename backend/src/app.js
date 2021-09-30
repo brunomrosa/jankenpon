@@ -11,6 +11,7 @@ import {
   verifyIfOponentHasChosen,
   getAllUsers,
   getOponent,
+  getUsersInRoom,
 } from "./users";
 const app = express();
 const port = 3333;
@@ -45,8 +46,11 @@ io.on("connection", (socket) => {
     console.log(
       `User connected, User: ${user.username}, room: ${gameroom}, id: ${socket.id}`
     );
+    const users = getUsersInRoom(gameroom);
 
-    return callback({ room: gameroom });
+    io.sockets.to(gameroom).emit("playerJoined", users);
+
+    return callback(user);
   });
 
   socket.on("roomInfo", (username, room, callback) => {

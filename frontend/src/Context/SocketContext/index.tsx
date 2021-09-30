@@ -1,41 +1,64 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useState, useEffect, useMemo, useCallback,
+} from 'react';
 import io, { Socket } from 'socket.io-client';
 
 interface Children {
   children: React.ReactNode
 }
 
-interface Oponent {
+interface User {
+  room: string;
   option: string;
   username: string;
+  score?: number;
 }
 interface SocketProviderData {
   socket?: any;
-  playerName: string;
-  setPlayername(arg: string): void;
-  setOponent(arg: Oponent): void;
-  oponent: Oponent;
+  player: User;
+  setOponent(arg: User): void;
+  updatePlayer(arg: User): void;
+  oponent: User;
 }
 
 const SocketContext = React.createContext({} as SocketProviderData);
 
 const SocketProvider = ({ children }: Children) => {
-  const [oponent, setOponent] = useState({} as Oponent);
-  const [playerName, setPlayername] = useState('');
   const ENDPOINT = 'http://localhost:3333';
-  const socket = io(ENDPOINT);
 
-  socket.on('message', (msg: any) => {
-    console.log('message: ', msg);
-  });
+  const [oponent, setOponent] = useState<User>(() => ({} as User));
+  const [player, setPlayer] = useState<User>(() => ({} as User));
+  const [socket] = useState(io(ENDPOINT));
 
-  socket.on('disconnected', (msg: any) => {
-    setOponent({ username: '', option: '' });
-  });
+  const playerJoin = useCallback((response: any) => {
+    if (response.length > 1) {
+      /*  console.log(player); */
+      const findOponent = response.filter((user: any) => user.username !== player.username);
+      if (findOponent[0]) {
+        setOponent(findOponent[0]);
+      }
+      /*  console.log(findOponent); */
+    }
+  }, [player, oponent]);
+
+  useEffect(() => {
+    socket.on('message', (msg: any) => {
+      console.log('message: ', msg);
+    });
+
+    socket.on('disconnected', (msg: any) => {
+      setOponent({ username: '', option: '', room: '' });
+    });
+    socket.on('playerJoined', (callback: any) => {
+      playerJoin(callback);
+    });
+  }, [player, oponent]);
+
+  const updatePlayer = useCallback((user: User) => { setPlayer(user); /* console.log('user: ', user); */ }, []);
 
   return (
     <SocketContext.Provider value={{
-      socket, playerName, setPlayername, oponent, setOponent,
+      socket, player, updatePlayer, oponent, setOponent,
     }}
     >
       {children}
