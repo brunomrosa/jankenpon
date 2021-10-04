@@ -12,6 +12,8 @@ import {
   getAllUsers,
   getOponent,
   getUsersInRoom,
+  verifyIfUsersHaveSelected,
+  findWinner,
 } from "./users";
 const app = express();
 const port = 3333;
@@ -73,10 +75,19 @@ io.on("connection", (socket) => {
 
   socket.on("selectOption", async (user, callback) => {
     const choice = await selectOption(user);
-    io.sockets
+    /* io.sockets
       .to(user?.room)
-      .emit("message", { user: user?.name, text: user?.option });
+      .emit("message", { user: user?.name, text: user?.option }); */
     /*    console.log(user.room); */
+
+    io.sockets.to(user?.room).emit("playerHasChosen", choice);
+
+    if (verifyIfUsersHaveSelected(user)) {
+      const winner = findWinner(user);
+      console.log(winner);
+      io.sockets.to(user?.room).emit("foundWinner", winner);
+    }
+
     return callback(choice);
   });
 

@@ -11,7 +11,7 @@ interface User {
   room: string;
   option: string;
   username: string;
-  score?: number;
+  score: number;
 }
 interface SocketProviderData {
   socket?: any;
@@ -26,20 +26,24 @@ const SocketContext = React.createContext({} as SocketProviderData);
 const SocketProvider = ({ children }: Children) => {
   const ENDPOINT = 'http://localhost:3333';
 
-  const [oponent, setOponent] = useState<User>(() => ({} as User));
-  const [player, setPlayer] = useState<User>(() => ({} as User));
+  const [oponent, setOponent] = useState<User>(() => ({ score: 0 } as User));
+  const [player, setPlayer] = useState<User>(() => ({ score: 0 } as User));
   const [socket] = useState(io(ENDPOINT));
 
-  const playerJoin = useCallback((response: any) => {
+  const playerJoin = (response: any) => {
     if (response.length > 1) {
-      /*  console.log(player); */
       const findOponent = response.filter((user: any) => user.username !== player.username);
       if (findOponent[0]) {
         setOponent(findOponent[0]);
       }
-      /*  console.log(findOponent); */
     }
-  }, [player, oponent]);
+  };
+  const playerHasChosen = (response: any) => {
+    if (player.username === undefined) return;
+    if (response.username !== player.username) {
+      setOponent(response);
+    }
+  };
 
   useEffect(() => {
     socket.on('message', (msg: any) => {
@@ -47,12 +51,31 @@ const SocketProvider = ({ children }: Children) => {
     });
 
     socket.on('disconnected', (msg: any) => {
-      setOponent({ username: '', option: '', room: '' });
+      setOponent({
+        username: '', option: '', room: '', score: 0,
+      });
     });
     socket.on('playerJoined', (callback: any) => {
       playerJoin(callback);
     });
-  }, [player, oponent]);
+    socket.on('playerHasChosen', (callback: any) => {
+      playerHasChosen(callback);
+    });
+    socket.on('foundWinner', (callback: any) => {
+      if (callback === 'fair') {
+        return;
+      }
+      if (callback.winner.username === player?.username) {
+        setPlayer(callback.winner);
+        setOponent({ ...oponent, option: '' });
+        return;
+      }
+      if (callback.winner.username === oponent?.username) {
+        setPlayer({ ...player, option: '' });
+        setOponent(callback.winner);
+      }
+    });
+  }, [player, oponent, socket]);
 
   const updatePlayer = useCallback((user: User) => { setPlayer(user); /* console.log('user: ', user); */ }, []);
 
