@@ -65,14 +65,14 @@ const SocketProvider = ({ children }: Children) => {
       if (callback === 'fair') {
         return;
       }
-      if (callback.winner.username === player?.username) {
-        setPlayer(callback.winner);
+      if (callback?.winner?.username === player?.username) {
+        setPlayer(callback?.winner);
         setOponent({ ...oponent, option: '' });
         return;
       }
-      if (callback.winner.username === oponent?.username) {
+      if (callback?.winner?.username === oponent?.username) {
         setPlayer({ ...player, option: '' });
-        setOponent(callback.winner);
+        setOponent(callback?.winner);
       }
     });
   }, [player, oponent, socket]);
