@@ -24,11 +24,11 @@ interface SocketProviderData {
 const SocketContext = React.createContext({} as SocketProviderData);
 
 const SocketProvider = ({ children }: Children) => {
-  const ENDPOINT = 'http://localhost:3333';
+  const ENDPOINT = process.env.REACT_APP_SOCKET_URL_DEV;
 
   const [oponent, setOponent] = useState<User>(() => ({ score: 0 } as User));
   const [player, setPlayer] = useState<User>(() => ({ score: 0 } as User));
-  const [socket] = useState(io(ENDPOINT));
+  const [socket] = useState(io(ENDPOINT || ''));
 
   const playerJoin = (response: any) => {
     if (response.length > 1) {
